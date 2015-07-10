@@ -1,11 +1,10 @@
 #!/bin/bash
 
+# Load config:
+source script.conf/memStats.conf;
+
 MYSQL=$(which mysql);
-UNAME='mylogin';
-PASSWD='mypassword';
-DB='mydb';
 HOSTNAME=$(hostname);
-SRV_ID=1;
 
 awk ' { 
 

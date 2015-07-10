@@ -1,12 +1,10 @@
 #!/bin/bash
 
-MYSQL=$(which mysql);                                                                                                                                                                             
-UNAME='mylogin';                                                                                                                                                                                   
-PASSWD='mypassword';                                                                                                                                                                              
-DB='mydb';
+# Load config:
+source script.conf/cpuStats.conf;
+
+MYSQL=$(which mysql); 
 HOSTNAME=$(hostname);
-SRV_ID=1;
-CORES=4;
 
 /usr/bin/mpstat -P ALL 1 1 | awk '
 {

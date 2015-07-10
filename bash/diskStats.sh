@@ -1,15 +1,14 @@
 #!/bin/bash
 
+# Load config:
+source script.conf/diskStats.conf;
+
 # hddtemp runs as a deamon, and by default listens on
 # TCP 7634 port, localhost.
 # There is also:
 # /usr/sbin/smartctl /dev/sda -a , but it requires root...
 
 MYSQL=$(which mysql);
-UNAME='mylogin';                                                                                                      
-PASSWD='mypassword';                                                                            
-DB='mydb';
-SRV_ID=1;
 
 # With -F you can specify the field seperator. Or like 
 # I do here, can specify a REGEX. This helps if you want

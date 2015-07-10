@@ -1,12 +1,11 @@
 #!/bin/bash
 
+# Load config:
+source script.conf/ioStats.conf;
+
 IOSTAT=$(which iostat);
 MYSQL=$(which mysql);
-UNAME='mylogin';
-PASSWD='mypassword';
-DB='mydb';
 HOSTNAME=$(hostname);
-SRV_ID=1;
 
 ${IOSTAT} -d | awk '
 {

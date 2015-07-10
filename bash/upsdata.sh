@@ -1,10 +1,9 @@
 #!/bin/bash
 
+# Load config:
+source script.conf/upsdata.conf;
+
 mysql=`which mysql`;
-uname='mylogin';
-passwd='mypassword';
-db='mydb';
-UPS_ID=1;
 
 /sbin/apcaccess | awk '
 
