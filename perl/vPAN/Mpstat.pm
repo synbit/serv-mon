@@ -80,7 +80,7 @@ Counter list:
 	usr, nice, sys, iowait, irq, soft, steal, guest, idle, total
 
 Usage examples:
-	my $var = new vPAN::mpstat;
+	my $var = new vPAN::Mpstat;
         my $stat = $var->cpustat();
         my $cpu_idle = $stat->{'cpu_0'}->{'idle'};
         my $totals = $stat->{'cpu_all'}->{'iowait'};
