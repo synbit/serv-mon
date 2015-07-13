@@ -15,6 +15,9 @@ sub getCPU {
     my $mpstat = new vPAN::Mpstat;
     my $counter = $mpstat->cpustat();
 
+# Print to the console what is about to be stored in MySQL:
+    print dump($counter) . "\n";
+
 # Calculate the totals:
     my $usr = $counter->{'cpu_all'}->{'usr'};
     my $nice = $counter->{'cpu_all'}->{'nice'};
