@@ -4,7 +4,7 @@ use warnings;
 use Data::Dump qw(dump);
 
 sub new {
-#    my $class = shift;
+
     my ($class) = @_;
 
     my $self = {};
