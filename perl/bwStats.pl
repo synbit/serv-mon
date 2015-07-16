@@ -7,7 +7,7 @@ use DBI;
 use Config::Simple;
 $|=1;
 
-sub getBW() {
+sub getBW {
 
     my @cmd_output;
     my @data;
@@ -34,7 +34,7 @@ sub getBW() {
 }
 getBW();
 
-sub saveToMySQL () {
+sub saveToMySQL {
 
     my $counter = shift;
     my $config = new Config::Simple('Config/stats.conf');
