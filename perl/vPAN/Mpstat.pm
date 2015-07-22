@@ -6,7 +6,6 @@ use Data::Dump qw(dump);
 sub new {
 
     my ($class) = @_;
-
     my $self = {};
 
     bless($self, $class);
