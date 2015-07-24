@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# Full path of this script:
+DIR=$(dirname "${BASH_SOURCE[0]}");
+
 # Load config:
-source script.conf/powerUsage.conf;
+source ${DIR}/script.conf/powerUsage.conf;
 
 # The current UPS model: Smart-UPS 700. This is 700 VA (P=V*I Watts).
 # Watts = (Precentage*700)*1/sqrt(2), to convert Peak-to-Peak to RMS.

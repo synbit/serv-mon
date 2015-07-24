@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# Get the path to the script:
+DIR=$(dirname "${BASH_SOURCE[0]}");
+
 # Load config:
-source script.conf/bwStats.conf;
+source ${DIR}/script.conf/bwStats.conf;
 
 MYSQL=$(which mysql);
 HOSTNAME=$(hostname);

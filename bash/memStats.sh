@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# Full path of current script:
+DIR=$(dirname "${BASH_SOURCE[0]}");
+
 # Load config:
-source script.conf/memStats.conf;
+source ${DIR}/script.conf/memStats.conf;
 
 MYSQL=$(which mysql);
 HOSTNAME=$(hostname);

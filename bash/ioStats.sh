@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# Full path of this script:
+DIR=$(dirname "${BASH_SOURCE[0]}");
+
 # Load config:
-source script.conf/ioStats.conf;
+source ${DIR}/script.conf/ioStats.conf;
 
 IOSTAT=$(which iostat);
 MYSQL=$(which mysql);

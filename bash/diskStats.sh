@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# Full path to current script:
+DIR=$(dirname "${BASH_SOURCE[0]}");
+
 # Load config:
-source script.conf/diskStats.conf;
+source ${DIR}/script.conf/diskStats.conf;
 
 # hddtemp runs as a deamon, and by default listens on
 # TCP 7634 port, localhost.

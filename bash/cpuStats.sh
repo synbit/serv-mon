@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# Full path of this script:
+DIR=$(dirname "${BASH_SOURCE[0]}");
+
 # Load config:
-source script.conf/cpuStats.conf;
+source ${DIR}/script.conf/cpuStats.conf;
 
 MYSQL=$(which mysql); 
 HOSTNAME=$(hostname);
