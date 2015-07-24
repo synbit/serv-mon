@@ -72,7 +72,7 @@ sub cpustat {
 
 sub help {
     my $msg = <<'EOF';
----- vPAN::mpstat (v0.0.1) ----
+---- vPAN::Mpstat (v0.0.1) ----
 The class expects core number (zero-indexed) and a counter.
 
 Counter list:
