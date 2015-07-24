@@ -51,13 +51,11 @@ sub iostat {
     }
 
     return $io or die help();
-
-    print dump($io)."\n";
 }
 
 sub help{
     my $msg = <<'EOF';
----- vPAN::iostat (v0.0.1) ----
+---- vPAN::Iostat (v0.0.1) ----
 The class expects device name and a counter.
 
 Counter list:
