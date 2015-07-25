@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Data::Dump qw(dump);
 use vPAN::Mpstat;
+use Sys::Hostname;
 use DBI;
 use Config::Simple;
 $|=1;
@@ -65,8 +66,7 @@ sub saveToMySQL {
     my $uname = $config->param('uname');
     my $passwd = $config->param('passwd');
     my $srv_id = $config->param('srv_id');
-    my $hostname = `/bin/hostname`;
-    chomp($hostname);
+    my $hostname = hostname;
     my $cores = 4;
 
     my $dbo = DBI->connect("dbi:mysql:$db_name", "$uname", "$passwd");
