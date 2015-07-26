@@ -16,64 +16,37 @@ sub getCPU {
     my $mpstat = new vPAN::Mpstat;
     my $counter = $mpstat->cpustat();
 
-# Print to the console what is about to be stored in MySQL:
+# Display what we are about to save into MySQL:
     print dump($counter) . "\n";
 
-# Calculate the totals:
-    my $usr = $counter->{'cpu_all'}->{'usr'};
-    my $nice = $counter->{'cpu_all'}->{'nice'};
-    my $sys = $counter->{'cpu_all'}->{'sys'};
-    my $iowait = $counter->{'cpu_all'}->{'iowait'};
-    my $irq = $counter->{'cpu_all'}->{'irq'};
-    my $soft = $counter->{'cpu_all'}->{'soft'};
-    my $steal = $counter->{'cpu_all'}->{'steal'};
-    my $guest = $counter->{'cpu_all'}->{'guest'};
-    my $idle = $counter->{'cpu_all'}->{'idle'};
-    my $total = 100 - $idle;
+# Overall stats for all cores:
+    my $totals = delete $counter->{'cpu_all'};
 
-# For individual CPUs just return the totals:
-    my $cpu0_idle = $counter->{'cpu_0'}->{'idle'};
-    my $cpu0_total = 100 - $cpu0_idle;
-    my $cpu1_idle = $counter->{'cpu_1'}->{'idle'};
-    my $cpu1_total = 100 - $cpu0_idle;
-    my $cpu2_idle = $counter->{'cpu_2'}->{'idle'};
-    my $cpu2_total = 100 - $cpu0_idle;
-    my $cpu3_idle = $counter->{'cpu_3'}->{'idle'};
-    my $cpu3_total = 100 - $cpu0_idle;
+# Get the number of cores after 'cpu_all' key is removed:
+    my $cores = keys $counter;
 
-# Save to MySQL:
-    saveToMySQL($total, $idle, $usr, $nice, $sys, $iowait,
-	$irq, $soft, $steal, $guest, $cpu0_total, $cpu0_idle,
-	$cpu1_total, $cpu1_idle, $cpu2_total, $cpu2_idle,
-	$cpu3_total, $cpu3_idle);
-
-=pod
-    my $help = $mpstat->help();
-    print $help;
-=cut
-
+    saveToMySQL($cores,	(100 -  $totals->{'idle'}), $totals, 
+		(100 - $counter->{'cpu_0'}->{'idle'}), $counter->{'cpu_0'}->{'idle'},
+		(100 - $counter->{'cpu_1'}->{'idle'}), $counter->{'cpu_1'}->{'idle'},
+		(100 - $counter->{'cpu_2'}->{'idle'}), $counter->{'cpu_2'}->{'idle'},
+		(100 - $counter->{'cpu_3'}->{'idle'}), $counter->{'cpu_3'}->{'idle'}
+	);
 }
 
 sub saveToMySQL {
 
-    my ($total, $idle, $usr, $nice, $sys, $iowait, $irq,
-	$soft, $steal, $guest, $cpu0_total, $cpu0_idle,
-	$cpu1_total, $cpu1_idle, $cpu2_total, $cpu2_idle,
-	$cpu3_total, $cpu3_idle) = @_;
+    my ($cores, $used, $totals, $cpu0_used, $cpu0_idle,
+	$cpu1_used, $cpu1_idle, $cpu2_used, $cpu2_idle,
+	$cpu3_used, $cpu3_idle) = @_;
 
     my $config = new Config::Simple('Config/stats.conf');
-    my $db_name = $config->param('db_name');
+    my $dsn = $config->param('dsn');
     my $uname = $config->param('uname');
     my $passwd = $config->param('passwd');
     my $srv_id = $config->param('srv_id');
     my $hostname = hostname;
-    my $cores = 4;
 
-    my $dbo = DBI->connect("dbi:mysql:$db_name", "$uname", "$passwd");
-
-    unless(defined($dbo)) {
-	die "Couldn't connect to database: '$db_name'\n";
-    }
+    my $dbo = DBI->connect("$dsn", "$uname", "$passwd") or die("Couldn't connect to database: '$dsn'\n");
 
     my $stm = <<'SQL';
 	INSERT INTO eulinx.server_cpu(srv_id, srv_name, cores, used_total, idle, usr, nice, sys, iowait, irq, soft, steal, guest, cpu0used, cpu0idle, cpu1used, cpu1idle, cpu2used, cpu2idle, cpu3used, cpu3idle, last_check)
@@ -82,10 +55,10 @@ SQL
 
     my $stm_cpu = $dbo->prepare($stm);
 
-    unless($stm_cpu->execute($srv_id,$hostname,$cores,$total,$idle,$usr,$nice,$sys,$iowait,$irq,$soft,$steal,$guest,$cpu0_total,$cpu0_idle,$cpu1_total,$cpu1_idle,$cpu2_total,$cpu2_idle,$cpu3_total,$cpu3_idle)) {
-	print "Couldn't perpare statement:\n" . $stm;
-    }
+    $stm_cpu->execute($srv_id, $hostname, $cores, $used, $totals->{'idle'}, $totals->{'usr'}, $totals->{'nice'}, $totals->{'sys'},
+		      $totals->{'iowait'}, $totals->{'irq'}, $totals->{'soft'}, $totals->{'steal'}, $totals->{'guest'},
+		      $cpu0_used,$cpu0_idle,$cpu1_used,$cpu1_idle,$cpu2_used,$cpu2_idle,$cpu3_used,$cpu3_idle
+	) or die("Couldn't execute statement:\n$stm");
 
     $dbo->disconnect() or die "Couldn't disconnect from MySQL (maybe there isn't an active connection).\n";
-
 }
