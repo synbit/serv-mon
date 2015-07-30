@@ -25,19 +25,28 @@ sub getCPU {
 # Get the number of cores after 'cpu_all' key is removed:
     my $cores = keys $counter;
 
-    saveToMySQL($cores,	(100 -  $totals->{'idle'}), $totals, 
-		(100 - $counter->{'cpu_0'}->{'idle'}), $counter->{'cpu_0'}->{'idle'},
-		(100 - $counter->{'cpu_1'}->{'idle'}), $counter->{'cpu_1'}->{'idle'},
-		(100 - $counter->{'cpu_2'}->{'idle'}), $counter->{'cpu_2'}->{'idle'},
-		(100 - $counter->{'cpu_3'}->{'idle'}), $counter->{'cpu_3'}->{'idle'}
-	);
+    my @cores = ();
+
+    for(my $i=0; $i<$cores; $i++) {
+	push @cores, {'used' => (100 - $counter->{"cpu_$i"}->{'idle'}), 'idle' => $counter->{"cpu_$i"}->{'idle'}};
+    }
+
+# Calculate the used total and push it into the hash reference:
+    $totals->{'used'} = (100 - $totals->{'idle'});
+
+    saveToMySQL($totals, \@cores);
 }
 
 sub saveToMySQL {
 
-    my ($cores, $used, $totals, $cpu0_used, $cpu0_idle,
-	$cpu1_used, $cpu1_idle, $cpu2_used, $cpu2_idle,
-	$cpu3_used, $cpu3_idle) = @_;
+    my ($totals_ref, $cores_ref) = @_;
+
+# Dereference the hash and the array:
+    my %totals = %{$totals_ref};
+    my @cores = @{$cores_ref};
+
+# Get the number of cores:
+    my $num_cores = scalar @cores;
 
     my $config = new Config::Simple('Config/stats.conf');
     my $dsn = $config->param('dsn');
@@ -55,9 +64,10 @@ SQL
 
     my $stm_cpu = $dbo->prepare($stm);
 
-    $stm_cpu->execute($srv_id, $hostname, $cores, $used, $totals->{'idle'}, $totals->{'usr'}, $totals->{'nice'}, $totals->{'sys'},
-		      $totals->{'iowait'}, $totals->{'irq'}, $totals->{'soft'}, $totals->{'steal'}, $totals->{'guest'},
-		      $cpu0_used,$cpu0_idle,$cpu1_used,$cpu1_idle,$cpu2_used,$cpu2_idle,$cpu3_used,$cpu3_idle
+    $stm_cpu->execute($srv_id, $hostname, $num_cores, $totals{'used'}, $totals{'idle'}, $totals{'usr'}, $totals{'nice'}, $totals{'sys'},
+		      $totals{'iowait'}, $totals{'irq'}, $totals{'soft'}, $totals{'steal'}, $totals{'guest'},
+		      $cores[0]->{'used'}, $cores[0]->{'idle'}, $cores[1]->{'used'}, $cores[1]->{'idle'},
+		      $cores[2]->{'used'}, $cores[2]->{'idle'}, $cores[3]->{'used'}, $cores[3]->{'idle'}
 	) or die("Couldn't execute statement:\n$stm");
 
     $dbo->disconnect() or die "Couldn't disconnect from MySQL (maybe there isn't an active connection).\n";
