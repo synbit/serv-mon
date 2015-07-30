@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Data::Dump qw(dump);
 use vPAN::Memstat;
+use Sys::Hostname;
 use Config::Simple;
 use DBI;
 $|=1;
@@ -36,7 +37,7 @@ sub saveToMySQL {
     my $uname = $config->param('uname');
     my $passwd = $config->param('passwd');
     my $srv_id = $config->param('srv_id');
-    my $srv_name = $config->param('srv_name');
+    my $hostname = hostname;
 
     my $dbo = DBI->connect("$dsn", "$uname", "$passwd");
 
@@ -52,7 +53,7 @@ SQL
 
     my $stm_mem = $dbo->prepare($stm);
 
-    unless($stm_mem->execute($srv_id, $srv_name, $total, $free,
+    unless($stm_mem->execute($srv_id, $hostname, $total, $free,
 			     $buffers, $cache, $used) )
     {
 	print "Couldn't prepare statement:\n" .$stm;
