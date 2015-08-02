@@ -39,11 +39,7 @@ sub saveToMySQL {
     my $srv_id = $config->param('srv_id');
     my $hostname = hostname;
 
-    my $dbo = DBI->connect("$dsn", "$uname", "$passwd");
-
-    unless(defined($dbo)) {
-	die "Couldn't connect to database: '$dsn'\n";
-    }
+    my $dbo = DBI->connect("$dsn", "$uname", "$passwd") or die("Couldn't connect to database: '$dsn'\n");
 
     my $stm = <<'SQL';
     INSERT INTO eulinx.server_memory (srv_id, srv_name, mem_total, mem_free,
@@ -53,12 +49,8 @@ SQL
 
     my $stm_mem = $dbo->prepare($stm);
 
-    unless($stm_mem->execute($srv_id, $hostname, $total, $free,
-			     $buffers, $cache, $used) )
-    {
-	print "Couldn't prepare statement:\n" .$stm;
-    }
+    $stm_mem->execute($srv_id, $hostname, $total, $free, $buffers, $cache, $used)
+	or die("Couldn't execute statement:\n$stm");
 
     $dbo->disconnect() or die "Couldn't disconnect from MySQL (maybe there isn't an ctive connection).\n";
-
 }
