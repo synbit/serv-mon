@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use Data::Dump qw(dump);
+use Sys::Hostname;
 use DBI;
 use Config::Simple;
 $|=1;
@@ -38,18 +39,14 @@ sub saveToMySQL {
 
     my $counter = shift;
     my $config = new Config::Simple('Config/stats.conf');
-    my $db_name = $config->param('db_name');
+    my $dsn = $config->param('dsn');
     my $uname = $config->param('uname');
     my $passwd = $config->param('passwd');
     my $srv_id = $config->param('srv_id');
-    my $hostname = `/bin/hostname`;
+    my $hostname = hostname;
     chomp($hostname);
 
-    my $dbo = DBI->connect("dbi:mysql:$db_name","$uname","$passwd");
-
-    unless(defined($dbo)) {
-	die "Couldn't connect to database: '$db_name'\n";
-    }
+    my $dbo = DBI->connect("$dsn","$uname","$passwd") or die ("Couldn't connect to database: '$dsn'\n");
 
     my $stm = <<'SQL';
 	INSERT INTO eulinx.server_bandwidth(srv_id,srv_name,lo_in,lo_out,eth0_in,eth0_out,last_check)
@@ -57,9 +54,9 @@ sub saveToMySQL {
 SQL
 
     my $stm_bw = $dbo->prepare($stm);
-    unless($stm_bw->execute($srv_id,$hostname,$counter->{'lo_in'},$counter->{'lo_out'},$counter->{'eth0_in'},$counter->{'eth0_out'})) {
-	print "Couldn't prepare statement:\n" . $stm;
-    }
+
+    $stm_bw->execute($srv_id,$hostname,$counter->{'lo_in'},$counter->{'lo_out'},$counter->{'eth0_in'},$counter->{'eth0_out'})
+	or die("Couldn't execute statement:\n$stm");
 
     $dbo->disconnect() or die "Couldn't disconnect from MySQL (maybe there isn't an active connection).\n";
 }
