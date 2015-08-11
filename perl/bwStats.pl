@@ -44,7 +44,6 @@ sub saveToMySQL {
     my $passwd = $config->param('passwd');
     my $srv_id = $config->param('srv_id');
     my $hostname = hostname;
-    chomp($hostname);
 
     my $dbo = DBI->connect("$dsn","$uname","$passwd") or die ("Couldn't connect to database: '$dsn'\n");
 
