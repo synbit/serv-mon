@@ -25,7 +25,7 @@ sub getPower {
     $power->{'load%'} = $load;
     $power->{'watts'} = $watts;
 
-    print dump($power);
+    say dump($power);
     saveToMySQL($power);
 }
 
