@@ -6,6 +6,8 @@
 # Status values: U (up), D (down)
 # State values: N (normal), L (leaving), J (joining), M (moving)
 
+which cassandra || echo "UNKNOWN - Apache Cassandra is not installed on this server" && exit 3;
+
 NODETOOL=$(which nodetool);
 NODES_DOWN=$(${NODETOOL} --host localhost status | grep --count -E '^D[A-Z]');
 
