@@ -28,7 +28,7 @@ sub getCPU {
     my @cores = ();
 
     for(my $i=0; $i<$cores; $i++) {
-	push @cores, {'used' => (100 - $counter->{"cpu_$i"}->{'idle'}), 'idle' => $counter->{"cpu_$i"}->{'idle'}};
+	push @cores, {'used' => (100 - $counter->{"cpu_$i"}{'idle'}), 'idle' => $counter->{"cpu_$i"}{'idle'}};
     }
 
 # Calculate the used total and push it into the hash reference:

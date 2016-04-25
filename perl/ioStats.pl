@@ -22,28 +22,28 @@ sub getIOStats {
     my $devices = \@devices;
 
 # Get TPS for all disks:
-    my $md0_tps = $counter->{'md0'}->{'tps'};
-    my $md1_tps = $counter->{'md1'}->{'tps'};
-    my $sda_tps = $counter->{'sda'}->{'tps'};
-    my $sdb_tps = $counter->{'sdb'}->{'tps'};
-    my $sdc_tps = $counter->{'sdc'}->{'tps'};
-    my $sdd_tps = $counter->{'sdd'}->{'tps'};
+    my $md0_tps = $counter->{'md0'}{'tps'};
+    my $md1_tps = $counter->{'md1'}{'tps'};
+    my $sda_tps = $counter->{'sda'}{'tps'};
+    my $sdb_tps = $counter->{'sdb'}{'tps'};
+    my $sdc_tps = $counter->{'sdc'}{'tps'};
+    my $sdd_tps = $counter->{'sdd'}{'tps'};
 
 # Get kBrps for all disks:
-    my $md0_kBrps = $counter->{'md0'}->{'kB_read/s'};
-    my $md1_kBrps = $counter->{'md1'}->{'kB_read/s'};
-    my $sda_kBrps = $counter->{'sda'}->{'kB_read/s'};
-    my $sdb_kBrps = $counter->{'sdb'}->{'kB_read/s'};
-    my $sdc_kBrps = $counter->{'sdc'}->{'kB_read/s'};
-    my $sdd_kBrps = $counter->{'sdd'}->{'kB_read/s'};
+    my $md0_kBrps = $counter->{'md0'}{'kB_read/s'};
+    my $md1_kBrps = $counter->{'md1'}{'kB_read/s'};
+    my $sda_kBrps = $counter->{'sda'}{'kB_read/s'};
+    my $sdb_kBrps = $counter->{'sdb'}{'kB_read/s'};
+    my $sdc_kBrps = $counter->{'sdc'}{'kB_read/s'};
+    my $sdd_kBrps = $counter->{'sdd'}{'kB_read/s'};
 
 # Get kBwps for all disks:
-    my $md0_kBwps = $counter->{'md0'}->{'kB_wrtn/s'};
-    my $md1_kBwps = $counter->{'md1'}->{'kB_wrtn/s'};
-    my $sda_kBwps = $counter->{'sda'}->{'kB_wrtn/s'};
-    my $sdb_kBwps = $counter->{'sdb'}->{'kB_wrtn/s'};
-    my $sdc_kBwps = $counter->{'sdc'}->{'kB_wrtn/s'};
-    my $sdd_kBwps = $counter->{'sdd'}->{'kB_wrtn/s'};
+    my $md0_kBwps = $counter->{'md0'}{'kB_wrtn/s'};
+    my $md1_kBwps = $counter->{'md1'}{'kB_wrtn/s'};
+    my $sda_kBwps = $counter->{'sda'}{'kB_wrtn/s'};
+    my $sdb_kBwps = $counter->{'sdb'}{'kB_wrtn/s'};
+    my $sdc_kBwps = $counter->{'sdc'}{'kB_wrtn/s'};
+    my $sdd_kBwps = $counter->{'sdd'}{'kB_wrtn/s'};
 
 # Save to MySQL:
     saveToMySQL($md0_tps, $md1_tps, $sda_tps, $sdb_tps, $sdc_tps, $sdd_tps,

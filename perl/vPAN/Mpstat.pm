@@ -81,8 +81,8 @@ Counter list:
 Usage examples:
 	my $var = new vPAN::Mpstat;
         my $stat = $var->cpustat();
-        my $cpu_idle = $stat->{'cpu_0'}->{'idle'};
-        my $totals = $stat->{'cpu_all'}->{'iowait'};
+        my $cpu_idle = $stat->{'cpu_0'}{'idle'};
+        my $totals = $stat->{'cpu_all'}{'iowait'};
         my $help = $stat->help();
         print $help;
 EOF
