@@ -66,7 +66,7 @@ Counter list:
 Usage examples:
 	my $var = new vPAN::Iostat;
     	my $stat = $var->iostat();
-	my $sda_tps = $stat->{'sda'}->{'tps'};
+	my $sda_tps = $stat->{'sda'}{'tps'};
 	my $help = $stat->help();
 	print $help;
 EOF
