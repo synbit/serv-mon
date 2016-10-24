@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Works with C* versions: 1.2.x, 2.0.x. It might work with other versions (not tested though).
-# Just for reference:
-# nodetool's output represents "Status" ans "State" in this order.
+# Reference:
+# nodetool's output represents "Status" and "State" in this order.
 # Status values: U (up), D (down)
 # State values: N (normal), L (leaving), J (joining), M (moving)
 
